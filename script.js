@@ -20,243 +20,240 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Quote Generator
-    const quoteText = document.getElementById('quote-text');
-    const quoteAuthor = document.getElementById('quote-author');
-    const newQuoteBtn = document.getElementById('new-quote');
-    const saveQuoteBtn = document.getElementById('save-quote');
-    const savedQuotesList = document.getElementById('saved-quotes-list');
-    
-    const quotes = [
+    // Recipe Data
+    const recipes = [
         {
-            text: "You are enough just as you are.",
-            author: "Megan Markle"
+            id: 1,
+            title: "Classic Spaghetti Carbonara",
+            description: "A traditional Italian pasta dish with eggs, cheese, pancetta, and pepper.",
+            cookTime: "20 min",
+            difficulty: "Medium",
+            ingredients: ["spaghetti", "eggs", "parmesan cheese", "pancetta", "black pepper", "salt"],
+            icon: "🍝"
         },
         {
-            text: "Mental health needs a great deal of attention. It's the final taboo and it needs to be faced and dealt with.",
-            author: "Adam Ant"
+            id: 2,
+            title: "Grilled Chicken Salad",
+            description: "Fresh mixed greens with grilled chicken, tomatoes, and balsamic dressing.",
+            cookTime: "15 min",
+            difficulty: "Easy",
+            ingredients: ["chicken breast", "mixed greens", "tomatoes", "cucumber", "balsamic vinegar", "olive oil"],
+            icon: "🥗"
         },
         {
-            text: "You don't have to control your thoughts. You just have to stop letting them control you.",
-            author: "Dan Millman"
+            id: 3,
+            title: "Beef Stir Fry",
+            description: "Quick and flavorful beef stir fry with vegetables and teriyaki sauce.",
+            cookTime: "25 min",
+            difficulty: "Medium",
+            ingredients: ["beef strips", "broccoli", "bell peppers", "onion", "garlic", "teriyaki sauce", "rice"],
+            icon: "🥩"
         },
         {
-            text: "Self-care is how you take your power back.",
-            author: "Lalah Delia"
+            id: 4,
+            title: "Margherita Pizza",
+            description: "Classic Italian pizza with fresh mozzarella, tomatoes, and basil.",
+            cookTime: "30 min",
+            difficulty: "Hard",
+            ingredients: ["pizza dough", "tomato sauce", "mozzarella cheese", "fresh basil", "olive oil"],
+            icon: "🍕"
         },
         {
-            text: "It's okay to not be okay as long as you're not giving up.",
-            author: "Karen Salmansohn"
+            id: 5,
+            title: "Chicken Curry",
+            description: "Aromatic and spicy chicken curry with coconut milk and spices.",
+            cookTime: "40 min",
+            difficulty: "Medium",
+            ingredients: ["chicken", "coconut milk", "onion", "garlic", "ginger", "curry powder", "tomatoes", "rice"],
+            icon: "🍛"
         },
         {
-            text: "You, yourself, as much as anybody in the entire universe, deserve your love and affection.",
-            author: "Buddha"
+            id: 6,
+            title: "Fish Tacos",
+            description: "Fresh fish tacos with cabbage slaw and lime crema.",
+            cookTime: "20 min",
+            difficulty: "Easy",
+            ingredients: ["white fish", "corn tortillas", "cabbage", "lime", "sour cream", "cilantro", "avocado"],
+            icon: "🌮"
         },
         {
-            text: "Healing is an art. It takes time, it takes practice, it takes love.",
-            author: "Maza Dohta"
+            id: 7,
+            title: "Mushroom Risotto",
+            description: "Creamy Italian rice dish with mixed mushrooms and parmesan.",
+            cookTime: "35 min",
+            difficulty: "Hard",
+            ingredients: ["arborio rice", "mushrooms", "vegetable broth", "onion", "white wine", "parmesan cheese", "butter"],
+            icon: "🍚"
         },
         {
-            text: "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity.",
-            author: "Unknown"
-        },
-        {
-            text: "The only journey is the journey within.",
-            author: "Rainer Maria Rilke"
-        },
-        {
-            text: "What mental health needs is more sunlight, more candor, and more unashamed conversation.",
-            author: "Glenn Close"
+            id: 8,
+            title: "Caesar Salad",
+            description: "Classic Caesar salad with crispy croutons and parmesan cheese.",
+            cookTime: "10 min",
+            difficulty: "Easy",
+            ingredients: ["romaine lettuce", "croutons", "parmesan cheese", "caesar dressing", "anchovies", "lemon"],
+            icon: "🥬"
         }
     ];
     
-    function getRandomQuote() {
-        const randomIndex = Math.floor(Math.random() * quotes.length);
-        return quotes[randomIndex];
+    // Global state
+    let selectedIngredients = [];
+    let filteredRecipes = recipes;
+    
+    // Recipe rendering functions
+    function createRecipeCard(recipe) {
+        return `
+            <div class="recipe-card">
+                <div class="recipe-image">
+                    ${recipe.icon}
+                </div>
+                <div class="recipe-content">
+                    <div class="recipe-title">${recipe.title}</div>
+                    <div class="recipe-description">${recipe.description}</div>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-clock"></i> ${recipe.cookTime}</span>
+                        <span><i class="fas fa-chart-bar"></i> ${recipe.difficulty}</span>
+                    </div>
+                    <div class="recipe-ingredients">
+                        <h4>Ingredients:</h4>
+                        <div class="ingredient-list">
+                            ${recipe.ingredients.map(ingredient => 
+                                `<span class="ingredient-tag">${ingredient}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
     }
     
-    function displayQuote() {
-        const quote = getRandomQuote();
-        quoteText.textContent = `"${quote.text}"`;
-        quoteAuthor.textContent = `- ${quote.author}`;
-    }
-    
-    newQuoteBtn.addEventListener('click', displayQuote);
-    
-    // Save quote to local storage
-    saveQuoteBtn.addEventListener('click', function() {
-        const currentQuote = quoteText.textContent;
-        const currentAuthor = quoteAuthor.textContent;
-        
-        if (currentQuote === 'Click the button below to get your daily motivational quote!') {
-            alert('Please generate a quote first!');
-            return;
+    function renderRecipes(recipesToRender, containerId) {
+        const container = document.getElementById(containerId);
+        if (recipesToRender.length === 0) {
+            container.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>No recipes found</h3>
+                    <p>Try adjusting your search criteria or removing some ingredient filters.</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = recipesToRender.map(recipe => createRecipeCard(recipe)).join('');
         }
-        
-        let savedQuotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
-        savedQuotes.push({ text: currentQuote, author: currentAuthor });
-        localStorage.setItem('savedQuotes', JSON.stringify(savedQuotes));
-        
-        updateSavedQuotesList();
+    }
+    
+    // Initialize all recipes view
+    renderRecipes(recipes, 'recipes-grid');
+    
+    // Featured recipes (first 4)
+    renderRecipes(recipes.slice(0, 4), 'featured-recipes');
+    
+    // Search and Filter functionality
+    const recipeSearch = document.getElementById('recipe-search');
+    const ingredientInput = document.getElementById('ingredient-input');
+    const selectedIngredientsContainer = document.getElementById('selected-ingredients');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    const searchSummary = document.getElementById('search-summary');
+    
+    // Ingredient filter functionality
+    ingredientInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const ingredient = this.value.trim().toLowerCase();
+            
+            if (ingredient && !selectedIngredients.includes(ingredient)) {
+                selectedIngredients.push(ingredient);
+                this.value = '';
+                updateIngredientTags();
+                updateFilteredRecipes();
+            }
+        }
     });
     
-    // Update saved quotes list
-    function updateSavedQuotesList() {
-        savedQuotesList.innerHTML = '';
-        const savedQuotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+    function updateIngredientTags() {
+        selectedIngredientsContainer.innerHTML = selectedIngredients.map(ingredient => `
+            <span class="selected-ingredient">
+                ${ingredient}
+                <button class="remove-ingredient" data-ingredient="${ingredient}">×</button>
+            </span>
+        `).join('');
         
-        if (savedQuotes.length === 0) {
-            savedQuotesList.innerHTML = '<li>No saved quotes yet.</li>';
-            return;
-        }
-        
-        savedQuotes.forEach((quote, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${quote.text} ${quote.author}</span>
-                <button class="delete-quote" data-index="${index}">Delete</button>
-            `;
-            savedQuotesList.appendChild(li);
-        });
-        
-        // Add event listeners to delete buttons
-        document.querySelectorAll('.delete-quote').forEach(button => {
+        // Add event listeners to remove buttons
+        document.querySelectorAll('.remove-ingredient').forEach(button => {
             button.addEventListener('click', function() {
-                const index = parseInt(this.getAttribute('data-index'));
-                let savedQuotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
-                savedQuotes.splice(index, 1);
-                localStorage.setItem('savedQuotes', JSON.stringify(savedQuotes));
-                updateSavedQuotesList();
+                const ingredient = this.getAttribute('data-ingredient');
+                selectedIngredients = selectedIngredients.filter(i => i !== ingredient);
+                updateIngredientTags();
+                updateFilteredRecipes();
             });
         });
     }
     
-    // Initialize saved quotes list
-    updateSavedQuotesList();
+    // Recipe name search functionality
+    recipeSearch.addEventListener('input', function() {
+        updateFilteredRecipes();
+    });
     
-    // Music Player
-    const audioPlayer = document.getElementById('audio-player');
-    const playButtons = document.querySelectorAll('.play-btn');
-    let currentlyPlaying = null;
-    
-    playButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const trackContainer = this.closest('.track');
-            const trackSrc = trackContainer.getAttribute('data-src');
+    function updateFilteredRecipes() {
+        const searchTerm = recipeSearch.value.toLowerCase();
+        
+        filteredRecipes = recipes.filter(recipe => {
+            // Check if recipe matches search term
+            const matchesSearch = searchTerm === '' || 
+                recipe.title.toLowerCase().includes(searchTerm) ||
+                recipe.description.toLowerCase().includes(searchTerm);
             
-            // If this track is already playing, pause it
-            if (currentlyPlaying === trackContainer) {
-                audioPlayer.pause();
-                currentlyPlaying = null;
-                this.innerHTML = '<i class="fas fa-play"></i> Play';
-                return;
-            }
+            // Check if recipe contains all selected ingredients
+            const matchesIngredients = selectedIngredients.length === 0 ||
+                selectedIngredients.every(ingredient =>
+                    recipe.ingredients.some(recipeIngredient =>
+                        recipeIngredient.toLowerCase().includes(ingredient)
+                    )
+                );
             
-            // Stop any currently playing track
-            if (currentlyPlaying) {
-                const currentlyPlayingButton = currentlyPlaying.querySelector('.play-btn');
-                currentlyPlayingButton.innerHTML = '<i class="fas fa-play"></i> Play';
-            }
-            
-            // Play the selected track
-            audioPlayer.src = trackSrc;
-            audioPlayer.play();
-            currentlyPlaying = trackContainer;
-            this.innerHTML = '<i class="fas fa-pause"></i> Pause';
-            
-            // Update when track ends
-            audioPlayer.onended = function() {
-                button.innerHTML = '<i class="fas fa-play"></i> Play';
-                currentlyPlaying = null;
-            };
+            return matchesSearch && matchesIngredients;
         });
-    });
-    
-    // Journal
-    const journalDate = document.getElementById('journal-date');
-    const journalMood = document.getElementById('journal-mood');
-    const journalEntry = document.getElementById('journal-entry');
-    const saveEntryBtn = document.getElementById('save-entry');
-    const clearEntryBtn = document.getElementById('clear-entry');
-    const entriesList = document.getElementById('entries-list');
-    
-    // Set default date to today
-    const today = new Date().toISOString().split('T')[0];
-    journalDate.value = today;
-    
-    // Save journal entry
-    saveEntryBtn.addEventListener('click', function() {
-        const date = journalDate.value;
-        const mood = journalMood.value;
-        const entry = journalEntry.value.trim();
         
-        if (!entry) {
-            alert('Please write something in your journal entry!');
-            return;
-        }
-        
-        let journalEntries = JSON.parse(localStorage.getItem('journalEntries')) || [];
-        journalEntries.unshift({ date, mood, entry });
-        localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-        
-        updateJournalEntriesList();
-        journalEntry.value = '';
-    });
-    
-    // Clear journal entry
-    clearEntryBtn.addEventListener('click', function() {
-        if (confirm('Are you sure you want to clear your current entry?')) {
-            journalEntry.value = '';
-        }
-    });
-    
-    // Update journal entries list
-    function updateJournalEntriesList() {
-        entriesList.innerHTML = '';
-        const journalEntries = JSON.parse(localStorage.getItem('journalEntries')) || [];
-        
-        if (journalEntries.length === 0) {
-            entriesList.innerHTML = '<p>No journal entries yet.</p>';
-            return;
-        }
-        
-        journalEntries.forEach(entry => {
-            const entryDiv = document.createElement('div');
-            entryDiv.className = 'entry';
-            entryDiv.innerHTML = `
-                <div class="entry-date">${entry.date}</div>
-                <div class="entry-mood">${entry.mood}</div>
-                <div class="entry-text">${entry.entry}</div>
-            `;
-            entriesList.appendChild(entryDiv);
-        });
+        renderRecipes(filteredRecipes, 'filtered-recipes');
+        updateSearchSummary();
     }
     
-    // Initialize journal entries list
-    updateJournalEntriesList();
+    function updateSearchSummary() {
+        const searchTerm = recipeSearch.value;
+        const hasFilters = searchTerm || selectedIngredients.length > 0;
+        
+        if (!hasFilters) {
+            searchSummary.innerHTML = '<p>Enter a recipe name or add ingredient filters to search recipes.</p>';
+        } else {
+            let summaryText = `Showing ${filteredRecipes.length} recipe${filteredRecipes.length !== 1 ? 's' : ''}`;
+            
+            if (searchTerm) {
+                summaryText += ` matching "${searchTerm}"`;
+            }
+            
+            if (selectedIngredients.length > 0) {
+                summaryText += ` with ingredients: ${selectedIngredients.join(', ')}`;
+            }
+            
+            searchSummary.innerHTML = `<p>${summaryText}</p>`;
+        }
+    }
     
-    // Random Tip Generator
-    const tipCards = document.querySelectorAll('.tip-card');
-    const randomTipBtn = document.getElementById('random-tip');
-    
-    randomTipBtn.addEventListener('click', function() {
-        // Reset all cards
-        tipCards.forEach(card => {
-            card.style.transform = 'translateY(0)';
-            card.style.boxShadow = 'var(--shadow)';
-        });
-        
-        // Select random card and highlight it
-        const randomIndex = Math.floor(Math.random() * tipCards.length);
-        const randomCard = tipCards[randomIndex];
-        
-        randomCard.style.transform = 'translateY(-10px)';
-        randomCard.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.2)';
-        
-        // Scroll to the random card
-        randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Clear filters functionality
+    clearFiltersBtn.addEventListener('click', function() {
+        recipeSearch.value = '';
+        selectedIngredients = [];
+        updateIngredientTags();
+        updateFilteredRecipes();
     });
     
-    // Display a random quote on page load
-    displayQuote();
+    // Initialize search summary
+    updateSearchSummary();
+    
+    // Auto-focus on search when search section is opened
+    document.querySelector('a[href="#search"]').addEventListener('click', function() {
+        setTimeout(() => {
+            recipeSearch.focus();
+        }, 100);
+    });
 });

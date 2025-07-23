@@ -3,157 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindful Moments - Daily Motivation & Mental Health</title>
+    <title>Food Recipe - Discover Amazing Recipes</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Mindful Moments</h1>
-            <p>Your daily companion for motivation and mental wellness</p>
+            <h1>Food Recipe</h1>
+            <p>Discover, share, and enjoy amazing recipes from around the world</p>
         </div>
     </header>
 
     <nav>
         <div class="container">
             <ul>
-                <li><a href="#quotes" class="active">Daily Quotes</a></li>
-                <li><a href="#music">Calming Music</a></li>
-                <li><a href="#journal">Journal</a></li>
-                <li><a href="#tips">Self-Care Tips</a></li>
+                <li><a href="#recipes" class="active">Recipes</a></li>
+                <li><a href="#search">Search & Filter</a></li>
+                <li><a href="#featured">Featured</a></li>
                 <li><a href="#about">About</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="container">
-        <section id="quotes" class="active-section">
-            <h2>Daily Inspiration</h2>
-            <div class="quote-container">
-                <div class="quote-box">
-                    <p id="quote-text">Click the button below to get your daily motivational quote!</p>
-                    <p id="quote-author"></p>
-                </div>
-                <button id="new-quote" class="btn">New Quote</button>
-                <button id="save-quote" class="btn secondary">Save Quote</button>
-            </div>
-            <div class="saved-quotes">
-                <h3>Your Saved Quotes</h3>
-                <ul id="saved-quotes-list"></ul>
+        <section id="recipes" class="active-section">
+            <h2>All Recipes</h2>
+            <div id="recipes-grid" class="recipes-grid">
+                <!-- Recipes will be loaded here dynamically -->
             </div>
         </section>
 
-        <section id="music">
-            <h2>Calming Music</h2>
-            <div class="music-player">
-                <div class="track" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
-                    <h3>Peaceful Piano</h3>
-                    <p>Soft piano melodies to calm your mind</p>
-                    <button class="play-btn btn"><i class="fas fa-play"></i> Play</button>
-                </div>
-                <div class="track" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">
-                    <h3>Ocean Waves</h3>
-                    <p>Gentle waves for relaxation</p>
-                    <button class="play-btn btn"><i class="fas fa-play"></i> Play</button>
-                </div>
-                <div class="track" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">
-                    <h3>Forest Ambience</h3>
-                    <p>Sounds of nature to reduce stress</p>
-                    <button class="play-btn btn"><i class="fas fa-play"></i> Play</button>
-                </div>
-                <div class="track" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">
-                    <h3>Meditation Chimes</h3>
-                    <p>Tibetan bowls for mindfulness</p>
-                    <button class="play-btn btn"><i class="fas fa-play"></i> Play</button>
-                </div>
-            </div>
-            <audio id="audio-player" controls style="display: none;"></audio>
-        </section>
-
-        <section id="journal">
-            <h2>Journal Your Thoughts</h2>
-            <div class="journal-container">
-                <div class="journal-form">
-                    <label for="journal-date">Date:</label>
-                    <input type="date" id="journal-date">
+        <section id="search">
+            <h2>Search & Filter Recipes</h2>
+            <div class="search-container">
+                <div class="search-form">
+                    <div class="search-input-group">
+                        <label for="recipe-search">Search by Recipe Name:</label>
+                        <input type="text" id="recipe-search" placeholder="Enter recipe name..." />
+                    </div>
                     
-                    <label for="journal-mood">How are you feeling today?</label>
-                    <select id="journal-mood">
-                        <option value="😊 Happy">😊 Happy</option>
-                        <option value="😔 Sad">😔 Sad</option>
-                        <option value="😌 Calm">😌 Calm</option>
-                        <option value="😠 Angry">😠 Angry</option>
-                        <option value="😨 Anxious">😨 Anxious</option>
-                        <option value="😴 Tired">😴 Tired</option>
-                        <option value="🤔 Thoughtful">🤔 Thoughtful</option>
-                    </select>
+                    <div class="ingredient-filter-group">
+                        <label for="ingredient-input">Filter by Ingredients:</label>
+                        <input type="text" id="ingredient-input" placeholder="Enter ingredient and press Enter..." />
+                        <div id="selected-ingredients" class="ingredient-tags"></div>
+                    </div>
                     
-                    <label for="journal-entry">Write your thoughts:</label>
-                    <textarea id="journal-entry" rows="8" placeholder="Express your feelings, thoughts, or anything you'd like to reflect on..."></textarea>
-                    
-                    <button id="save-entry" class="btn">Save Entry</button>
-                    <button id="clear-entry" class="btn secondary">Clear</button>
+                    <div class="filter-actions">
+                        <button id="clear-filters" class="btn secondary">Clear All Filters</button>
+                    </div>
                 </div>
-                <div class="journal-entries">
-                    <h3>Previous Entries</h3>
-                    <div id="entries-list"></div>
+                
+                <div class="search-results">
+                    <div id="search-summary" class="search-summary"></div>
+                    <div id="filtered-recipes" class="recipes-grid">
+                        <!-- Filtered recipes will appear here -->
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="tips">
-            <h2>Self-Care Tips</h2>
-            <div class="tips-container">
-                <div class="tip-card">
-                    <i class="fas fa-spa"></i>
-                    <h3>Mindful Breathing</h3>
-                    <p>Take 5 deep breaths, inhaling through your nose and exhaling through your mouth. Focus only on your breath.</p>
-                </div>
-                <div class="tip-card">
-                    <i class="fas fa-walking"></i>
-                    <h3>Short Walk</h3>
-                    <p>Even a 10-minute walk outside can boost your mood and clear your mind.</p>
-                </div>
-                <div class="tip-card">
-                    <i class="fas fa-book"></i>
-                    <h3>Gratitude List</h3>
-                    <p>Write down 3 things you're grateful for today, no matter how small.</p>
-                </div>
-                <div class="tip-card">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>Digital Detox</h3>
-                    <p>Take 30 minutes away from screens. Try reading, drawing, or just sitting quietly.</p>
-                </div>
-                <div class="tip-card">
-                    <i class="fas fa-glass-whiskey"></i>
-                    <h3>Hydrate</h3>
-                    <p>Drink a glass of water. Dehydration can affect your mood and energy levels.</p>
-                </div>
-                <div class="tip-card">
-                    <i class="fas fa-heart"></i>
-                    <h3>Positive Affirmation</h3>
-                    <p>Repeat to yourself: "I am enough. My feelings are valid. This moment will pass."</p>
-                </div>
+        <section id="featured">
+            <h2>Featured Recipes</h2>
+            <div id="featured-recipes" class="recipes-grid">
+                <!-- Featured recipes will be loaded here -->
             </div>
-            <button id="random-tip" class="btn">Give Me a Random Tip</button>
         </section>
 
         <section id="about">
-            <h2>About Mindful Moments</h2>
+            <h2>About Food Recipe</h2>
             <div class="about-content">
-                <p>Welcome to Mindful Moments, your daily companion for motivation and mental wellness.</p>
-                <p>This site was created to provide quick access to tools that can help improve your mental health and daily motivation. Whether you need an inspiring quote, calming sounds, a place to journal your thoughts, or simple self-care tips, we're here to help.</p>
-                <p>Remember: Taking care of your mental health is just as important as taking care of your physical health. Small, consistent practices can make a big difference over time.</p>
-                <p>We hope this site helps you find moments of peace and motivation in your daily life.</p>
+                <p>Welcome to Food Recipe, your ultimate destination for discovering and sharing amazing recipes from around the world.</p>
+                <p>Our platform allows you to easily browse through a wide variety of recipes, search by ingredients, and find the perfect dish for any occasion.</p>
+                <p>Whether you're looking for quick weeknight dinners, elaborate weekend projects, or dietary-specific meals, we've got you covered.</p>
+                <p>Start exploring and discover your next favorite recipe!</p>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2023 Mindful Moments. All rights reserved.</p>
-            <p>Remember: You matter. Your mental health matters.</p>
+            <p>&copy; 2023 Food Recipe. All rights reserved.</p>
+            <p>Discover amazing recipes from around the world.</p>
             <div class="social-links">
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
