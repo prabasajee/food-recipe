@@ -11,6 +11,25 @@
     --text-color: #333;
     --text-light: #f8f9fa;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --bg-color: #f5f5f5;
+    --card-bg: white;
+    --border-color: #ddd;
+    --transition: all 0.3s ease;
+}
+
+/* Dark mode variables */
+[data-theme="dark"] {
+    --primary-color: #8a7cdb;
+    --secondary-color: #a385db;
+    --accent-color: #5d4e75;
+    --light-color: #2c2c2c;
+    --dark-color: #f8f9fa;
+    --text-color: #e0e0e0;
+    --text-light: #333;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --bg-color: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --border-color: #444;
 }
 
 * {
@@ -23,7 +42,8 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    background-color: #f5f5f5;
+    background-color: var(--bg-color);
+    transition: var(--transition);
 }
 
 .container {

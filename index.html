@@ -10,37 +10,46 @@
 <body>
     <header>
         <div class="container">
-            <h1>Mindful Moments</h1>
-            <p>Your daily companion for motivation and mental wellness</p>
+            <div class="header-content">
+                <div>
+                    <h1>Mindful Moments</h1>
+                    <p>Your daily companion for motivation and mental wellness</p>
+                </div>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
         </div>
     </header>
 
-    <nav>
+    <nav role="navigation" aria-label="Main navigation">
         <div class="container">
-            <ul>
-                <li><a href="#quotes" class="active">Daily Quotes</a></li>
-                <li><a href="#music">Calming Music</a></li>
-                <li><a href="#journal">Journal</a></li>
-                <li><a href="#tips">Self-Care Tips</a></li>
-                <li><a href="#about">About</a></li>
+            <ul role="menubar">
+                <li role="none"><a href="#quotes" class="active" role="menuitem" aria-current="page">Daily Quotes</a></li>
+                <li role="none"><a href="#music" role="menuitem">Calming Music</a></li>
+                <li role="none"><a href="#journal" role="menuitem">Journal</a></li>
+                <li role="none"><a href="#tips" role="menuitem">Self-Care Tips</a></li>
+                <li role="none"><a href="#about" role="menuitem">About</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="container">
-        <section id="quotes" class="active-section">
-            <h2>Daily Inspiration</h2>
+        <section id="quotes" class="active-section" aria-labelledby="quotes-heading">
+            <h2 id="quotes-heading">Daily Inspiration</h2>
             <div class="quote-container">
-                <div class="quote-box">
-                    <p id="quote-text">Click the button below to get your daily motivational quote!</p>
-                    <p id="quote-author"></p>
+                <div class="quote-box" role="region" aria-label="Quote display">
+                    <p id="quote-text" aria-live="polite">Click the button below to get your daily motivational quote!</p>
+                    <p id="quote-author" aria-live="polite"></p>
                 </div>
-                <button id="new-quote" class="btn">New Quote</button>
-                <button id="save-quote" class="btn secondary">Save Quote</button>
+                <div class="quote-actions">
+                    <button id="new-quote" class="btn" aria-describedby="quote-text">New Quote</button>
+                    <button id="save-quote" class="btn secondary">Save Quote</button>
+                </div>
             </div>
-            <div class="saved-quotes">
-                <h3>Your Saved Quotes</h3>
-                <ul id="saved-quotes-list"></ul>
+            <div class="saved-quotes" aria-labelledby="saved-quotes-heading">
+                <h3 id="saved-quotes-heading">Your Saved Quotes</h3>
+                <ul id="saved-quotes-list" role="list" aria-label="Saved quotes"></ul>
             </div>
         </section>
 
